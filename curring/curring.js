@@ -20,3 +20,15 @@ function curring(fn) {
 let fn = curring(sum)
 
 console.log(fn(1)(2,3)(4))
+
+
+function curring2(fn) {
+  let _arr = []
+  return function() {
+    let newArr = _arr.push(...arguments)
+    fn.apply(this, newArr)
+  }
+}
+let fn2 = curring(sum)
+
+console.log(fn2(4)(2,3)(4))
