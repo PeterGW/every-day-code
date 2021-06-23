@@ -1,4 +1,4 @@
-const fs = require()
+const fs = require('fs')
 // 发布
 let envent = {
   _arr: [],
@@ -25,6 +25,10 @@ envent.on((data) => {
   }
 })
 
-envent.emit('name', 'Mrgao')
+fs.readFile('./emit-on/name.txt', 'utf8', function (err, data) {
+  envent.emit('name', data)
+})
 
-envent.emit('age', 30)
+fs.readFile('./emit-on/age.txt', 'utf8', function (err, data) {
+  envent.emit('age', data)
+})
