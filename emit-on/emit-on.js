@@ -1,5 +1,5 @@
 const fs = require('fs')
-// 发布
+// 发布-订阅模式   两者没有关联  可以只发布
 let envent = {
   _arr: [],
 
