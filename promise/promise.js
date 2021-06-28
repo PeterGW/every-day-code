@@ -1,3 +1,5 @@
+// base primise 基本功能
+
 const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED'
 const REJECTED = 'REJECTED'
