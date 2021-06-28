@@ -12,7 +12,7 @@ class Promise {
     this.onFulfilledCallbacks = []
     this.onRejectedCallbacks = []
 
-    const reject = (value) => {
+    const resovle = (value) => {
       if (this.status == PENDING) {
         this.value = value
         this.status = FULFILLED
@@ -20,7 +20,7 @@ class Promise {
       }
     }
 
-    const resovle = (reason) => {
+    const reject = (reason) => {
       if (this.status == PENDING) {
         this.reason = reason
         this.status = REJECTED
@@ -28,7 +28,11 @@ class Promise {
       }
     }
 
-    executor(reject, resovle) // promise 接受一个函数， 且函数要立即执行，函数接受两个回调函数
+    try {
+      executor(resovle, reject) // promise 接受一个函数， 且函数要立即执行，函数接受两个回调函数
+    } catch (err) {
+      reject(err)
+    }
   }
 
   then(onFulfilled, onRejected) {

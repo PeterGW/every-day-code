@@ -1,10 +1,10 @@
 
 let Promise = require('./promise')
 let promise = new Promise((resovle, reject) => {
-  // return new Error('失败')
-  setTimeout(function(){
-    resovle('ok')
-  }, 1000)
+  throw new Error('失败')
+  // setTimeout(function(){
+  //   resovle('ok')
+  // }, 1000)
 })
 
 promise.then(
