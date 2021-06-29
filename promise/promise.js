@@ -36,7 +36,8 @@ class Promise {
       reject(err)
     }
   }
-
+  
+  // 链式调用
   then(onFulfilled, onRejected) {
     if (this.status == FULFILLED) {
       onFulfilled(this.value)
