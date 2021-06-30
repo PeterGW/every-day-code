@@ -4,6 +4,9 @@ const PENDING = 'PENDING';
 const FULFILLED = 'FULFILLED'
 const REJECTED = 'REJECTED'
 
+function resolvePromise(x, promise, resovle, reject) {
+  
+}
 class Promise {
   constructor(executor) {
 
@@ -43,23 +46,54 @@ class Promise {
   // 3、如果在then方法的成功或者失败的回调 执行时出错会走到下一次then中的失败中去
   // 如果返回的是一个失败的promise或者报错，才会走下一个then的是失败，否则全部走成功
   then(onFulfilled, onRejected) {
-    if (this.status == FULFILLED) {
-      onFulfilled(this.value)
-    }
-
-    if (this.status == REJECTED) {
-      onRejected(this.reason)
-    }
-
-    if (this.status == PENDING) {
-      this.onFulfilledCallbacks.push(() => {
-        onFulfilled(this.value)
-      })
-
-      this.onRejectedCallbacks.push(() => {
-        onRejected(this.reason)
-      })
-    }
+    let promise = new Promise((resovle, reject) => {
+      if (this.status == FULFILLED) {
+        setTimeout(() => {
+          try {
+            let x = onFulfilled(this.value)
+            resolvePromise(x, promise, resovle, reject)
+          } catch(e) {
+            reject(e)
+          }
+        }, 0)
+      }
+  
+      if (this.status == REJECTED) {
+        setTimeout(() => {
+          try {
+            let x = onRejected(this.reason)
+            resolvePromise(x, promise, resovle, reject)
+          } catch(e) {
+            reject(e)
+          }
+        }, 0)
+      }
+  
+      if (this.status == PENDING) {
+        this.onFulfilledCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              let x = onFulfilled(this.value)
+              resolvePromise(x, promise, resovle, reject)
+            } catch(e) {
+              reject(e)
+            }
+          }, 0)
+        })
+  
+        this.onRejectedCallbacks.push(() => {
+          setTimeout(() => {
+            try{
+              let x = onRejected(this.reason)
+              resolvePromise(x, promise, resovle, reject)
+            } catch(e) {
+              reject(e)
+            }
+          }, 0)
+        })
+      }
+    })
+    return promise
   }
 }
 
