@@ -1,5 +1,6 @@
 
 let Promise = require('./promise')
+let fs = require('fs').promises
 // let promise = new Promise((resovle, reject) => {
 //   throw new Error('失败')
 //   // setTimeout(function(){
@@ -23,14 +24,23 @@ let Promise = require('./promise')
 //   console.log(err, "fail")
 // })
 
-let promise2 = new Promise((resovle, reject) => {
-  resovle('ok')
-}).then((data) => {
-  return 100
-})
+// ---
+// let promise2 = new Promise((resovle, reject) => {
+//   resovle('ok')
+// }).then((data) => {
+//   return 100
+// })
 
-promise2.then((data) => {
-  console.log(data)
-}, err => {
-  console.log('err', err)
+// promise2.then((data) => {
+//   console.log(data)
+// }, err => {
+//   console.log('err', err)
+// })
+
+// --
+// Promise.all 表示全部成功才成功， 如果一个失败了 则失败
+Promise.all([13, 5, 11]).then(data => {
+    console.log(data);
+}).catch(err => {
+    console.log(err)
 })

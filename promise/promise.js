@@ -6,7 +6,6 @@ const REJECTED = 'REJECTED'
 
 function resolvePromise(x, promise, resovle, reject) {
   
-  console.log(x, promise, resovle, reject)
   // 如果x是promise的话，状态一直不能改变，所以抛错循环引用
   if (x == promise) {
     throw new TypeError('循环引用') 
@@ -152,29 +151,29 @@ class Promise {
       reject(err)
     })
   }
-  
-  all(promise) {
-    return new Promise((resolve, reject) => {
-      let index = 0
-      let result = []
-      function process(p, k) {
-        result[k] = p
-        if (++index == promise.length) {
-          resolve(result)
-        }
+}
+
+Promise.all = function(promises) {
+  return new Promise((resolve, reject) => {
+    let index = 0
+    let result = []
+    function process(p, k) {
+      result[k] = p
+      if (++index == promises.length) {
+        resolve(result)
       }
-      for (let i = 0; i < promise.length; i++) {
-        let p = promise[i]
-        if (p && typeof p.then === 'function') {
-          p.then(data => {
-            process(data, i)
-          }, reject)
-        } else {
-          process(p, importScripts)
-        }
+    }
+    for (let i = 0; i < promises.length; i++) {
+      let p = promises[i]
+      if (p && typeof p.then === 'function') {
+        p.then(data => {
+          process(data, i)
+        }, reject)
+      } else {
+        process(p, i)
       }
-    })
-  }
+    }
+  })
 }
 
 // 静态方法
