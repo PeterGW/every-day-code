@@ -42,6 +42,8 @@ function resolvePromise(x, promise, resovle, reject) {
     resovle(x)
   }
 }
+
+
 class Promise {
   constructor(executor) {
 
@@ -133,6 +135,45 @@ class Promise {
       }
     })
     return promise
+  }
+
+  catch(errFn) {
+    return this.then(null, errFn)
+  }
+
+  static resolve(val) {
+    return new Promise(resolve, reject => {
+      resolve(val)
+    })
+  }
+
+  static reject(err) {
+    return new Promise(resolve, reject => {
+      reject(err)
+    })
+  }
+  
+  all(promise) {
+    return new Promise((resolve, reject) => {
+      let index = 0
+      let result = []
+      function process(p, k) {
+        result[k] = p
+        if (++index == promise.length) {
+          resolve(result)
+        }
+      }
+      for (let i = 0; i < promise.length; i++) {
+        let p = promise[i]
+        if (p && typeof p.then === 'function') {
+          p.then(data => {
+            process(data, i)
+          }, reject)
+        } else {
+          process(p, importScripts)
+        }
+      }
+    })
   }
 }
 
