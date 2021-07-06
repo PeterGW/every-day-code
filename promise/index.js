@@ -44,3 +44,16 @@ Promise.all([13, 5, 11]).then(data => {
 }).catch(err => {
     console.log(err)
 })
+console.log(Promise.resolve())
+// Promise.resolve('ok').finally(() => {
+//     console.log('成功失败都会调用')
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve('xxx')
+//         }, 1000)
+//     })
+// }).then((data) => {
+//     console.log('success', data)
+// }).catch(err => {
+//     console.log('fail', err)
+// })

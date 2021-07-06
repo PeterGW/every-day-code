@@ -176,6 +176,14 @@ Promise.all = function(promises) {
   })
 }
 
+Promise.prototype.finally = function(cb) {
+  return this.then((y) => {
+    return Promise.resolve(cb()).then((d) => y)
+  }, (r) => {
+    return Promise.resolve(cb()).then( () => {throw r})
+  })
+}
+
 // 静态方法
 Promise.deferred = function(){
   let dfd = {};
