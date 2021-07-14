@@ -5,3 +5,6 @@ function deepClone(obj) {
   }
   return newObj
 }
+
+
+// 对于包装类 String、Number、正则等 使用自身的valueOf()方法进行克隆
