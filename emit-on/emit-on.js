@@ -32,3 +32,24 @@ fs.readFile('./emit-on/name.txt', 'utf8', function (err, data) {
 fs.readFile('./emit-on/age.txt', 'utf8', function (err, data) {
   envent.emit('age', data)
 })
+
+
+var input = {
+  a: {
+    b: {
+      c: {
+        dd: 'abcdd'
+      }
+    },
+    d: {
+      xx: 'adxx'
+    },
+    e: 'ae'
+  }
+}
+// 要求转换成如下对象
+var output = {
+  'a.b.c.dd': 'abcdd',
+  'a.d.xx': 'adxx',
+  'a.e': 'ae'
+}
