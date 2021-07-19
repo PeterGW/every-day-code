@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input id="unDebounce" value="" />
+  <script>
+    function ajax(content) {
+      console.log('ajax request ' + content)
+    };
+
+    let inputa = document.getElementById('unDebounce');
+
+    let debounceAjax = debounce(ajax, 500)
+
+    let throttleAjax = throttle(ajax, 1000)
+
+    inputa.addEventListener('keyup', function (e) {
+      throttleAjax(e.target.value)
+    });
+
+    function debounce(fn, wait) {
+      let timer = null;
+      return function() {
+        const contex = this;
+        const args = arguments
+        if (timer) clearTimeout(timer)
+        timer = setTimeout(function() {
+          fn.apply(contex, args)
+        }, wait)
+      }
+    }
+
+    function throttle(fn, wait) {
+      let timer = null, lastTime = 0;
+      return function() {
+        let now = new Date().getTime();
+        const context = this;
+        const args = arguments;
+        if (now - lastTime < wait) {
+          clearTimeout(timer);
+          timer = setTimeout(function(){
+            lastTime = now;
+            fn.apply(context, args)
+          }, wait)
+        } else {
+          lastTime = now;
+          fn.apply(context, args)
+        }
+      }
+    }
+  </script>
+</body>
+</html>

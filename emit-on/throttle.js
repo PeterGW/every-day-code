@@ -5,15 +5,16 @@ function throttle(fn, time) {
   return function () {
     let now = new Date().now();
     const args = arguments
+    const _this = this
     if (now - lastTime < time) {
       clearTimeout(timer)
       timer = setTimeout(function () {
         lastTime = now
-        fn.apply(this, args);
+        fn.apply(_this, args);
       }, time)
     } else {
       lastTime = now
-      fn.apply(this, args);
+      fn.apply(_this, args);
     }
   };
 }
