@@ -35,3 +35,73 @@ function debounce(fn, delay) {
     }
   }
 }
+
+function debounce2(fn, await) {
+  let timer = null;
+  return function() {
+    if (timer) clearTimeout(timer)
+    let _this = this;
+    let args = arguments;
+    timer = setTimeout(() => {
+      fn.apply(_this, args)
+    }, wait)
+  }
+}
+// --------
+function Dog(name) {
+  this.name = name
+  this.say = function () {
+      console.log('name = ' + this.name)
+  }
+}
+
+function _new() {
+  let obj = {};
+  const args = arguments;
+  const fn = Array.prototype.shift.call(args);
+  obj._proto_ = fn.prototype;
+  let res = fn.apply(obj, args)
+  return res instanceof Object ? res : obj
+}
+
+const dog = _new(Dog, 'aa')
+dog.say()
+
+
+function myNew() {
+  const constr = Array.prototype.shift.call(arguments)
+  let obj = Object.create(constr.prototype)
+  const res = constr.apply(obj, arguments)
+  return res instanceof Object ? res : obj
+}
+
+const dog2 = myNew(Dog, 'aa')
+dog2.say()
+
+// -------
+console.log(1)
+
+async function async() {
+  console.log(2)
+  await console.log(3)
+  console.log(4)
+}
+
+setTimeout(() => {
+  console.log(5)
+}, 0)
+
+const promise = new Promise((resolve, reject) => {
+  console.log(6)
+  resolve(7)
+})
+
+promise.then(res => {
+  console.log(res)
+})
+
+async()
+
+console.log(8)
+// 1 6 2 3 8
+// 宏任务[5]  微任务[7, 4]
