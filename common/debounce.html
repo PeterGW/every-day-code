@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    body{
+        width: 100%;
+        height: 500px;
+    }
+</style>
+<body>
+    <script>
+        function debounce(fn, delay) {
+            let timer = null;
+            return function() {
+                const context = this;
+                const args = arguments;
+                timer && clearTimeout(timer);
+                timer = setTimeout(function(){
+                    fn.apply(context, args)
+                }, delay)
+            }
+        }
+
+        function debounce2(fn, delay) {
+            let timer = null;
+            return function() {
+                // const context = this;
+                const args = arguments;
+                let now = !timer
+                timer && clearTimeout(timer);
+                timer = setTimeout(function(){
+                    // fn.apply(context, args)
+                    timer = null;
+                }, delay)
+                if (now) {
+                    fn.apply(this, args)
+                }
+            }
+        }
+
+        function throttle(fn, delay) {
+            let last = 0, timer = null;
+            return function() {
+                const now = new Date().getTime();
+                const context = this;
+                const args = arguments;
+                if (now - last < delay) {
+                    clearTimeout(timer)
+                    timer = setTimeout(function(){
+                        last = now;
+                        fn.apply(context, args)
+                    }, delay)
+                }else {
+                    last = now;
+                    fn.apply(context, args)
+                }
+            }
+        }
+
+        function deepClone(obj) {
+            const newObj = obj instanceof Array ? [] : {};
+            for (let item in obj) {
+                newObj[item] = typeof obj[item] === "Object" ? deepClone(obj[item]) : obj[item]
+            }
+            return newObj
+        }
+
+        function myNew() {
+            let constr = Array.prototype.shift.call(arguments)
+            let obj = Object.create(constr.prototype);
+            const res = constr.apply(obj, arguments);
+            return res instanceof Object ? res : obj
+        }
+
+        function _new() {
+            let obj = {};
+            let fn = Array.prototype.shift.call(arguments)
+            obj._proto_ = fn.prototype
+            let res = fn.apply(obj, Array.prototype.slice.call(arguments))
+            return res instanceof Object ? res : obj
+        }
+
+        Function.prototype.myCall = function(ctx) {
+            const context = ctx || window;
+            const args = [...arguments].slice(1)
+
+            context.fn = this;
+            const res = context.fn(...args)
+
+            delete context.fn;
+            return res;
+        }
+
+        function ss(...args){
+            console.log(this.a);
+            console.log(args);
+        }
+        var o = {
+            a:1
+        }
+
+        console.log(ss.myCall(o, 1, 2))
+
+        Function.prototype.myBind = function () {
+            const context = this;
+            const obj = arguments[0];
+            console.log('obj', obj)
+            const args = Array.prototype.slice.call(arguments, 1)
+            if(typeof context !== 'function') {
+                throw new TypeError('Function')
+            }
+            const curFun =  function() {
+                console.log('fuc_', this)
+                return context.apply(this instanceof fn ? this : obj,
+                    args.concat(Array.prototype.slice.call(arguments))
+                )
+            }
+            const fn = function() {};
+            if (context.prototype) {
+                fn.prototype = context.prototype;
+            }
+            curFun.prototype = new fn();
+            return curFun;
+        }
+
+        var obj = {name:"Smiley"};
+        var greeting = function(str, lang){
+            this.value = 'greetingValue';
+            console.log('this::', this)
+            console.log("Welcome "+this.name+" to "+str+" in "+lang);
+        };
+        var objGreeting = greeting.myBind(obj, 'the world');
+        var newObj = new objGreeting('JS');
+        console.log(newObj.value);
+
+        function Dog(name) {
+            this.name = name
+            this.say = function () {
+                console.log('name = ' + this.name)
+            }
+        }
+
+        const dog = _new(Dog, 'aa')
+
+        dog.say()
+
+        var mo = throttle(function(e){
+            const ev = e || window.event;
+            console.log(ev.pageX, ev.pageY)
+        }, 1000)
+
+        window.addEventListener('mousemove', mo)
+    </script>
+</body>
+</html>
